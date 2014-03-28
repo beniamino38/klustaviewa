@@ -66,9 +66,15 @@ class CorrelogramsTask(QtCore.QObject):
         if len(clusters_to_update) == 0:
             return {}
         clusters_to_update = np.array(clusters_to_update, dtype=np.int32)
-        correlograms = compute_correlograms(spiketimes, clusters,
-            clusters_to_update=clusters_to_update,
-            ncorrbins=ncorrbins, corrbin=corrbin)
+        try:
+            correlograms = compute_correlograms(spiketimes, clusters,
+                clusters_to_update=clusters_to_update,
+                ncorrbins=ncorrbins, corrbin=corrbin)
+        except:
+            correlograms = compute_correlograms(spiketimes.astype(np.float32), clusters,
+                clusters_to_update=clusters_to_update,
+                ncorrbins=ncorrbins, corrbin=corrbin)
+          
         return correlograms
     
     def compute_done(self, spiketimes, clusters, clusters_to_update=None,
